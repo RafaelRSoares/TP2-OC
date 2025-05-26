@@ -14,9 +14,9 @@ module TB_Memoria_Intrucoes;
         .pc(pc),
         .instruction(instruction),
         .Opcode(Opcode),
-        .Reg1(Reg1),
-        .Reg2(Reg2),
-        .RegD(RegD)
+        .Rs1(Reg1),
+        .Rs2(Reg2),
+        .RsD(RegD)
     );
 
     // Geração do clock
@@ -28,13 +28,9 @@ module TB_Memoria_Intrucoes;
 
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
-        $display("Tempo: %d | clk = %b", $time, clk);
-        $display("PC %d",pc);
-        $display("Intrucao: %b",instruction);
-        $display("Opcode[6:0]: %b",Opcode);
-        $display("Rs1[19:15]: %b",Reg1);
-        $display("Rs2[24:24]: %b",Reg2);
-        $display("RD[11:7]: %b",RegD);
+        $display("Tempo: %d ", $time, clk);
+        $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
+        $display("Opcode[6:0]: %b|Rs1: %b|Rs2: %b|RD: %b\n",Opcode,Reg1,Reg2,RegD);
         pc = pc + 4;
         if (pc > 24) begin
             $finish;
@@ -42,6 +38,5 @@ module TB_Memoria_Intrucoes;
     end
 endmodule
 
-//Para compilar:
-//iverilog -g2012 -o executavel.vvp Instructions_Memory/Memoria_de_Instrucoes.sv Instructions_Memory/TB_Memoria_de_Instrucoes.sv 
-//vvp executavel.vvp
+// Para compilar e rodar
+//mingw32-make Teste_Intrucoes

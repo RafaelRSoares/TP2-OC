@@ -10,11 +10,17 @@ module TB_registradores;
     logic [4:0] Rs1;
     logic [4:0] Rs2;
     logic [4:0] RsD;
-    
     logic [31:0] WriteData;
     logic [31:0] data1;
     logic [31:0] data2;
 
+    logic Branch;
+    logic MemRead;
+    logic MemtoReg;
+    logic ALUOp;
+    logic MemWrite;
+    logic ALUSrc;
+    
     Memoria_Intrucoes TBMEMORIA(
         .pc(pc),
         .instruction(instruction),
@@ -47,7 +53,7 @@ module TB_registradores;
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
-        $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
+        $display("PC %d |Opcode: %b ",pc,Opcode);
         $display("Rs1: %b|Rs2: %b|RD: %b |WriteData %d",Rs1,Rs2,RsD,WriteData);
         $display("Data1: %d |Data2: %d\n",data1,data2);
         pc = pc + 4;
