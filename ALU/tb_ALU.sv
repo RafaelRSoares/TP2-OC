@@ -18,9 +18,10 @@ module tb_ALU;
         .eh_zero(eh_zero)
     );
 
+
     // Procedimento de teste
     initial begin
-        $display("\n==== Início dos Testes da ALU ====\n");
+        $display("\n==== Inicio dos Testes da ALU ====\n");
 
         // Teste 1: ADD
         entrada1 = 32'd10;
@@ -69,7 +70,7 @@ module tb_ALU;
         entrada2 = 32'd0;
         controle_alu = 4'b1111;
         #1;
-        $display("INVÁLIDO: controle_alu = %b | resultado = %h | eh_zero = %b", controle_alu, resultado, eh_zero);
+        $display("INVALIDO: controle_alu = %b | resultado = %h | eh_zero = %b", controle_alu, resultado, eh_zero);
 
         $display("\n==== Fim dos Testes da ALU ====\n");
         $finish; // encerra simulação

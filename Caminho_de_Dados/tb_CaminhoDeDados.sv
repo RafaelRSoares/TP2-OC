@@ -17,7 +17,7 @@ module tb_CaminhoDeDados;
 
     initial begin
         // Inicialização
-        $display("=== Teste do Caminho de Dados ===");
+        $display("=== Teste do Caminho de Dados tb===");
         clk = 0;
         reset = 1;
 

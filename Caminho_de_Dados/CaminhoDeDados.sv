@@ -4,7 +4,7 @@ module CaminhoDeDados(
 );
 
 // Exemplo: instrução "sub x5, x1, x2" codificada em binário
-assign instrucao = 32'h40B50533;
+assign instrucao = 32'h40B5053;
 
     logic [31:0] pc_atual;      // Endereço da instrução atual
     logic [31:0] instrucao;     // Instrução que vem da memória
