@@ -9,6 +9,8 @@ module TB_Memoria_Intrucoes;
     logic [4:0] Reg1;
     logic [4:0] Reg2;
     logic [4:0] RegD;
+    logic [2:0] funct3;
+    logic funct7;
 
     Memoria_Intrucoes tb(
         .pc(pc),
@@ -16,7 +18,9 @@ module TB_Memoria_Intrucoes;
         .Opcode(Opcode),
         .Rs1(Reg1),
         .Rs2(Reg2),
-        .RsD(RegD)
+        .RsD(RegD),
+        .funct3(funct3),
+        .funct7(funct7)
     );
 
     // Geração do clock
@@ -30,7 +34,7 @@ module TB_Memoria_Intrucoes;
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time, clk);
         $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
-        $display("Opcode[6:0]: %b|Rs1: %b|Rs2: %b|RD: %b\n",Opcode,Reg1,Reg2,RegD);
+        $display("Opcode[6:0]: %b |Rs1: %b |Rs2: %b |RD: %b |funct3: %b |funct7: %b\n",Opcode,Reg1,Reg2,RegD,funct3,funct7);
         pc = pc + 4;
         if (pc > 24) begin
             $finish;
