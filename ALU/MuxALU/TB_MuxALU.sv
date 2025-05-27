@@ -23,18 +23,9 @@ module TB_registradores;
     logic [1:0] ALUOp;
     logic MemWrite;
     logic ALUSrc;
-
+    
     logic [31:0] SaidaMuxALU;
     logic [31:0] Imediato;
-
-    logic [3:0] controle_alu;
-
-    logic [31:0] resultado;
-    logic eh_zero;
-
-    logic [31:0] ReadData;
-    
-    logic [31:0] PcProximo;
 
     Memoria_Intrucoes TBMEMORIA(
         .pc(pc),
@@ -67,12 +58,7 @@ module TB_registradores;
         .MempraReg(MemtoReg),
         .Branch(Branch),
         .ALUOp(ALUOp)
-    );
-
-     GeradorImediato TBGERADORIMEDIATO(
-        .Instrucao(instruction),
-        .Imediato(Imediato)
-    );
+     );
 
     MuxALU TBMUXALU(
         .ALUSrc(ALUSrc),
@@ -81,58 +67,21 @@ module TB_registradores;
         .SaidaMuxALU(SaidaMuxALU)
     );
 
-    controle_alu TBCONTORLE_ALU(
-        .ALUOp(ALUOp),
-        .funct3(funct3),
-        .funct7b5(funct7),
-        .controle_alu(controle_alu)
-     );
-
-    ALU TBALU(
-        .entrada1(data1),
-        .entrada2(SaidaMuxALU),
-        .controle_alu(controle_alu),
-        .resultado(resultado),
-        .eh_zero(eh_zero)
-    );
-
-    Memoria TBDATAMEMORY(
-        .clk(clk),
-        .Endereco(resultado),
-        .WriteData(WriteData),
-        .MemWrite(MemWrite),
-        .MemRead(MemRead),
-        .ReadData(ReadData)
-    );
-
-    MuxDataMemory MUXDATAMEMORY(
-        .MemtoReg(MemtoReg),
-        .ReadData(ReadData),
-        .ResultadoALU(resultado),
-        .WriteData(WriteData)
-    );
-
-    Pc_modulo TBPCModulo(
-        .PcAnterior(pc),
-        .Imediato(Imediato),
-        .Branch(Branch),
-        .eh_zero(eh_zero),
-        .PcProximo(PcProximo)
-    );
-
     // Geração do clock
     initial begin
         clk = 0;
         pc = 0;
+        Imediato = 32'd666;
+        WriteData = 32'd999;
         forever #5 clk = ~clk; // alterna clk a cada 5ns
     end
 
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
-        $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
-        $display("PC Proximo: %b",pc);
-        pc = PcProximo;
+        $display("PC %d |ALUSrc: %b |Entrada2 %b |Imediato: %b",pc,ALUSrc,data2,Imediato);
+        $display("SaidaMuxALU: %b\n",SaidaMuxALU);
+        pc = pc + 4;
         if (pc > 24) begin
             $finish;
         end
@@ -141,4 +90,4 @@ module TB_registradores;
 endmodule
 
 //Para compilar e rodar
-//mingw32-make Teste_ALU
+//mingw32-make Teste_Controle

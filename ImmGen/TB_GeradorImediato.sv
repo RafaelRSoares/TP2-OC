@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module TB_Memoria_Intrucoes;
+module TB_GeradorImediato;
 
     logic clk;
     logic [31:0] pc;
@@ -12,6 +12,8 @@ module TB_Memoria_Intrucoes;
     logic [2:0] funct3;
     logic funct7;
 
+    logic [31:0] Imediato;
+
     Memoria_Intrucoes tb(
         .pc(pc),
         .instruction(instruction),
@@ -21,6 +23,11 @@ module TB_Memoria_Intrucoes;
         .RsD(RegD),
         .funct3(funct3),
         .funct7(funct7)
+    );
+
+    GeradorImediato TBGERADORIMEDIATO(
+        .Instrucao(instruction),
+        .Imediato(Imediato)
     );
 
     // Geração do clock
@@ -34,7 +41,7 @@ module TB_Memoria_Intrucoes;
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
         $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
-        $display("Opcode[6:0]: %b |Rs1: %b |Rs2: %b |RD: %b |funct3: %b |funct7: %b\n",Opcode,Reg1,Reg2,RegD,funct3,funct7);
+        $display("Imediato: %d\n",Imediato);
         pc = pc + 4;
         if (pc > 24) begin
             $finish;

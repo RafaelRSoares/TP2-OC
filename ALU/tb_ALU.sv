@@ -24,6 +24,9 @@ module TB_registradores;
     logic MemWrite;
     logic ALUSrc;
 
+    logic [31:0] SaidaMuxALU;
+    logic [31:0] Imediato;
+
     logic [3:0] controle_alu;
 
     logic [31:0] resultado;
@@ -60,9 +63,21 @@ module TB_registradores;
         .MempraReg(MemtoReg),
         .Branch(Branch),
         .ALUOp(ALUOp)
-     );
+    );
 
-     controle_alu TBCONTORLE_ALU(
+     GeradorImediato TBGERADORIMEDIATO(
+        .Instrucao(instruction),
+        .Imediato(Imediato)
+    );
+
+    MuxALU TBMUXALU(
+        .ALUSrc(ALUSrc),
+        .entrada2(data2),
+        .Imediato(Imediato),
+        .SaidaMuxALU(SaidaMuxALU)
+    );
+
+    controle_alu TBCONTORLE_ALU(
         .ALUOp(ALUOp),
         .funct3(funct3),
         .funct7b5(funct7),
@@ -71,7 +86,7 @@ module TB_registradores;
 
     ALU TBALU(
         .entrada1(data1),
-        .entrada2(data2),
+        .entrada2(SaidaMuxALU),
         .controle_alu(controle_alu),
         .resultado(resultado),
         .eh_zero(eh_zero)
@@ -88,7 +103,7 @@ module TB_registradores;
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
-        $display("PC %d |Entrada1: %b |Entrada2: %b |Controle ALU: %b",pc,data1,data2,controle_alu);
+        $display("PC %d |Entrada1: %b |Entrada2: %b |Controle ALU: %b",pc,data1,SaidaMuxALU,controle_alu);
         $display("Resultado: %b |Eh_zero: %b\n",resultado,eh_zero);
         pc = pc + 4;
         if (pc > 24) begin

@@ -34,8 +34,6 @@ module TB_registradores;
 
     logic [31:0] ReadData;
     
-    logic [31:0] PcProximo;
-
     Memoria_Intrucoes TBMEMORIA(
         .pc(pc),
         .instruction(instruction),
@@ -112,14 +110,6 @@ module TB_registradores;
         .WriteData(WriteData)
     );
 
-    Pc_modulo TBPCModulo(
-        .PcAnterior(pc),
-        .Imediato(Imediato),
-        .Branch(Branch),
-        .eh_zero(eh_zero),
-        .PcProximo(PcProximo)
-    );
-
     // Geração do clock
     initial begin
         clk = 0;
@@ -130,9 +120,9 @@ module TB_registradores;
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
-        $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
-        $display("PC Proximo: %b",pc);
-        pc = PcProximo;
+        $display("PC %d |MemtoReg: %b |ReadData: %b | Resultado %b",pc,MemtoReg,ReadData,resultado);
+        $display("WriteData: %b\n",WriteData);
+        pc = pc + 4;
         if (pc > 24) begin
             $finish;
         end
