@@ -131,9 +131,10 @@ module TB_registradores;
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
         $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
-        $display("PC Proximo: %b",pc);
+        $display("Reg1: %d |Data1: %d |Reg2: %d |Data2: %d",Rs1,data1,Rs2,data2);
+        $display("WriteData %d |MemtoReg: %d",WriteData,MemtoReg);
         pc = PcProximo;
-        if (pc > 24) begin
+        if (pc > 60 ) begin
             $finish;
         end
     end

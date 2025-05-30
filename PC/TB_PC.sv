@@ -31,7 +31,7 @@ module TB_pc;
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
         $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
-        $display("PC Proximo: %b",pc);
+        $display("PC Proximo: %b",PcProximo);
         pc = PcProximo;
         if (pc > 24) begin
             $finish;

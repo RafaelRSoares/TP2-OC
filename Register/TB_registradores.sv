@@ -44,7 +44,7 @@ module TB_registradores;
         clk = 0;
         pc = 0;
         RegWrite = 0;
-        WriteData = 32'd999;
+        WriteData = 32'd153;
         forever #5 clk = ~clk; // alterna clk a cada 5ns
     end
 
