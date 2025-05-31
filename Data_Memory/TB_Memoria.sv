@@ -69,8 +69,7 @@ module TB_registradores;
 
      GeradorImediato TBGERADORIMEDIATO(
         .Instrucao(instruction),
-        .Imediato(Imediato),
-        .clk(clk)
+        .Imediato(Imediato)
     );
 
     MuxALU TBMUXALU(
@@ -117,7 +116,7 @@ module TB_registradores;
         $display("PC %d |Endereco %d |WriteData: %b |MemWrite %b |MemRead: %b",pc,resultado,data2,MemWrite,MemRead);
         $display("ReadData: %b\n",ReadData);
         pc = pc + 4;
-        if (pc > 0) begin
+        if (pc > 8) begin
             $finish;
         end
     end

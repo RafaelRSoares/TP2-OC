@@ -160,7 +160,7 @@ module TB_registradores;
         $display("WriteDataFinal: %d",WriteDataReg);
         $display("========================================================================\n");
         pc = PcProximo;
-        if (pc > 64 ) begin
+        if (pc > 4 ) begin
             $finish;
         end
     end

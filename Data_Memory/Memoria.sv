@@ -25,8 +25,8 @@ end
 always_ff @(posedge clk) begin
     if (MemRead) begin
         dado_lido = MemExterna[endereco_byte];
-        ReadData = {{22{dado_lido[7]}}, dado_lido}; // extensão de sinal
-        $display("entrou para ler");
+        ReadData = {{24{dado_lido[7]}}, dado_lido};// extensão de sinal
+        $display("dado_lido %b, readdata %b",dado_lido,ReadData);
     end 
     else if (MemWrite) begin
         MemExterna[endereco_byte] = WriteData[7:0];
@@ -34,10 +34,8 @@ always_ff @(posedge clk) begin
 end
 
 final begin
-            $display("dado_lido: %b |readdata %b",dado_lido,ReadData);
-
     for (i = 0;i < 40 ;i = i + 1 ) begin
-        $display("MemoriaExterna: [%d] = %b",i,MemExterna[i]);
+        $display("MemoriaExterna: [%d] = %d",i,MemExterna[i]);
     end
 end
 

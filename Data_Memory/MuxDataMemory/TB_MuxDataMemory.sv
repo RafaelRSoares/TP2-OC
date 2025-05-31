@@ -97,7 +97,7 @@ module TB_registradores;
     Memoria TBDATAMEMORY(
         .clk(clk),
         .Endereco(resultado),
-        .WriteData(WriteData),
+        .WriteData(data2),
         .MemWrite(MemWrite),
         .MemRead(MemRead),
         .ReadData(ReadData)
