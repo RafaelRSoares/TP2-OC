@@ -26,10 +26,4 @@ always_ff @(posedge clk)begin
     end
 end
 
-final begin
-    for (i = 0;i < 32 ;i = i + 1 ) begin
-        $display("Registrador [%d] = %d",i,registradores[i]);
-    end
-end
-
 endmodule

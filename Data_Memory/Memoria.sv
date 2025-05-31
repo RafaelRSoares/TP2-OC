@@ -41,6 +41,7 @@ module Memoria(
         end
     end
 
+<<<<<<< Updated upstream
     final begin
         $display("dado_lido final: %h | ReadData: %h", dado_lido, ReadData);
         for (i = 0; i < 40; i = i + 1) begin
@@ -48,3 +49,7 @@ module Memoria(
         end
     end
 endmodule
+=======
+
+endmodule
+>>>>>>> Stashed changes
