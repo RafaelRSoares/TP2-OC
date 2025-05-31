@@ -69,7 +69,8 @@ module TB_registradores;
 
      GeradorImediato TBGERADORIMEDIATO(
         .Instrucao(instruction),
-        .Imediato(Imediato)
+        .Imediato(Imediato),
+        .clk(clk)
     );
 
     MuxALU TBMUXALU(
@@ -97,7 +98,7 @@ module TB_registradores;
     Memoria TBDATAMEMORY(
         .clk(clk),
         .Endereco(resultado),
-        .WriteData(WriteData),
+        .WriteData(data2),
         .MemWrite(MemWrite),
         .MemRead(MemRead),
         .ReadData(ReadData)
@@ -113,10 +114,10 @@ module TB_registradores;
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
         $display("Tempo: %d ", $time);
-        $display("PC %d |Endereco %d |WriteData: %b |MemWrite %b |MemRead: %b",pc,resultado,WriteData,MemWrite,MemRead);
+        $display("PC %d |Endereco %d |WriteData: %b |MemWrite %b |MemRead: %b",pc,resultado,data2,MemWrite,MemRead);
         $display("ReadData: %b\n",ReadData);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 0) begin
             $finish;
         end
     end

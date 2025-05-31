@@ -13,7 +13,7 @@ module TB_registradores;
     logic [2:0] funct3;
     logic funct7;
 
-    logic [31:0] WriteData;
+    logic [31:0] WriteDataReg;
     logic [31:0] data1;
     logic [31:0] data2;
 
@@ -53,7 +53,7 @@ module TB_registradores;
         .Rs1(Rs1),
         .Rs2(Rs2),
         .RsD(RsD),
-        .WriteData(WriteData),
+        .WriteData(WriteDataReg),
         .Data1(data1),
         .Data2(data2)
      );
@@ -99,17 +99,18 @@ module TB_registradores;
     Memoria TBDATAMEMORY(
         .clk(clk),
         .Endereco(resultado),
-        .WriteData(WriteData),
+        .WriteData(data2),
         .MemWrite(MemWrite),
         .MemRead(MemRead),
         .ReadData(ReadData)
     );
 
     MuxDataMemory MUXDATAMEMORY(
+        .clk(clk),
         .MemtoReg(MemtoReg),
         .ReadData(ReadData),
         .ResultadoALU(resultado),
-        .WriteData(WriteData)
+        .WriteData(WriteDataReg)
     );
 
     Pc_modulo TBPCModulo(
@@ -129,12 +130,37 @@ module TB_registradores;
 
     // Apenas para simulação: mostra o valor do clock ao longo do tempo
     always_ff @(posedge clk)begin
-        $display("Tempo: %d ", $time);
-        $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
-        $display("Reg1: %d |Data1: %d |Reg2: %d |Data2: %d",Rs1,data1,Rs2,data2);
-        $display("WriteData %d |MemtoReg: %d",WriteData,MemtoReg);
+        $display("========================================================================");
+        $display("Memoria de Intrucao:");
+        $display("Tempo: %d |PC: %d", $time,pc);
+        $display("Instrucao: %b |Opcode: %b |Rs1: %d |Rs2: %d",instruction,Opcode,Rs1,Rs2);
+        $display("RD: %d |Funct3: %b |Funct7: %b\n",RsD,funct3,funct7);
+
+        $display("Controle:");
+        $display("Branch %d |MemRead: %d |MemtoReg: %d |ALUOp: %b",Branch,MemRead,MemtoReg,ALUOp);
+        $display("MemWrite: %d |AlUSrc: %d |RegWrite %d\n",MemWrite,ALUSrc,RegWrite);
+
+        $display("Registradores:");
+        $display("Write Data: %d |DataRs1 %d |DataRs2: %d\n",WriteDataReg,data1,data2);
+
+        $display("Gerador Imediato: %d",Imediato);
+        $display("Instrucao: %b",instruction);
+        $display("Saida Mux ALU %d",SaidaMuxALU);
+        $display("ALU control: %d\n",controle_alu);
+
+        $display("ALU:");
+        $display("Resultado ALU: %d |Eh_zero :%d\n",resultado,eh_zero);
+
+        $display("Data Memory:");
+        $display("Endereco/Entrada: %d |WriteData/Data2: %b",resultado,data2);
+        $display("ReadData/SaidaMemory: %b\n",ReadData);
+
+        $display("Mux Data Memory:");
+        $display("0-ResultadoAlu: %d |1-ReadData %d",resultado,ReadData);
+        $display("WriteDataFinal: %d",WriteDataReg);
+        $display("========================================================================\n");
         pc = PcProximo;
-        if (pc > 60 ) begin
+        if (pc > 64 ) begin
             $finish;
         end
     end

@@ -5,7 +5,6 @@ module Controle (
 );
 
 always_comb begin
-
     // valor base das variáveis, é o default, só que antes ao invés de no final, pra poder escrever só as mudanças de valor
     RegWrite   = 0;
     MemRead    = 0;

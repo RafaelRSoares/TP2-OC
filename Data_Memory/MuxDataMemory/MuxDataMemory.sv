@@ -1,11 +1,11 @@
 module MuxDataMemory (
-    input logic MemtoReg,
+    input logic MemtoReg,clk,
     input logic [31:0] ReadData,
     input logic [31:0] ResultadoALU,
     output logic [31:0] WriteData
 );
 
-always_comb begin
+always_comb begin // mudei tava ff
     case (MemtoReg)
         1'b0: begin
             WriteData = ResultadoALU;

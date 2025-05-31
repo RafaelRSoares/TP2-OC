@@ -20,19 +20,14 @@ end
 assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
 assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
 
-always @(posedge clk)begin
+always_ff @(posedge clk)begin
     if (RegWrite == 1 && RsD != 0) begin
         registradores[RsD] = WriteData;
     end
-    // for (i = 0;i < 31 ;i = i + 1 ) begin
-    //     $display("Registrador | [%d] = %d",i,registradores[i]);   
-    //     end
-    //     $display("\n");
-    
 end
 
 final begin
-    for (i = 0;i < 31 ;i = i + 1 ) begin
+    for (i = 0;i < 32 ;i = i + 1 ) begin
         $display("Registrador [%d] = %d",i,registradores[i]);
     end
 end
