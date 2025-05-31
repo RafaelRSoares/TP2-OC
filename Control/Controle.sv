@@ -30,6 +30,11 @@ always_comb begin
         7'b1100011: begin //beq
             Branch=1; ALUOp=2'b01;
         end
+        default: begin
+            `ifdef SIMULATION
+            $display("Opcode não reconhecido: %b", opcode);
+            `endif
+        end
     endcase
     
 end
