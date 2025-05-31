@@ -9,7 +9,7 @@ module Memoria_Intrucoes(
     output logic funct7
 );
 
-    parameter TamMEM = 16 ;
+    parameter TamMEM = 52 ;
 
     logic [31:0] mem [0:TamMEM - 1];
 

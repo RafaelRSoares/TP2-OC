@@ -27,9 +27,11 @@ always_ff @(posedge clk)begin
 end
 
 final begin
+    $display("            Register: ");
     for (i = 0;i < 32 ;i = i + 1 ) begin
-        $display("Registrador [%d] = %d",i,registradores[i]);
+        $display("Register [%d] = %d",i,registradores[i]);
     end
+    $display("\n");
 end
 
 endmodule
