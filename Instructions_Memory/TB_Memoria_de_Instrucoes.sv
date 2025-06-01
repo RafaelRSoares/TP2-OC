@@ -36,11 +36,11 @@ module TB_Memoria_Intrucoes;
         $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
         $display("Opcode[6:0]: %b |Rs1: %b |Rs2: %b |RD: %b |funct3: %b |funct7: %b\n",Opcode,Reg1,Reg2,RegD,funct3,funct7);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 endmodule
 
-// Para compilar e rodar
-//mingw32-make Teste_Intrucoes
+//Compilar e rodar:
+// mingw32-make Teste_Instrucoes

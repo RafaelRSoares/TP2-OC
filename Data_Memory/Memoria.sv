@@ -20,12 +20,12 @@ module Memoria(
             MemExterna[i] = 32'h0;
         end
     end
-    //esse trem de assíncrona que eu usei na alu antes, ver se funciona melhor aqui, já não está dando certo mesmo, quem sabe
+
     // Leitura combinacional (assíncrona)
     always_comb begin
         if (MemRead && !MemWrite) begin
             dado_lido = MemExterna[endereco_byte];
-            ReadData = {{24{dado_lido[7]}}, dado_lido}; //aqui estava 22 antes, mas parce que o ccerto é 24, vamos ver se vai
+            ReadData = {{24{dado_lido[7]}}, dado_lido}; 
         end
         else begin
             ReadData = 32'b0;
@@ -42,7 +42,7 @@ module Memoria(
     final begin
         $display("               Memoria Exterma");
         for (i = 0; i < 32; i = i + 1) begin
-            $display("MemoriaExterna[%d] = %b", i, MemExterna[i]);
+            $display("MemoriaExterna[%d] = %d", i, MemExterna[i]);
         end
     end
 endmodule

@@ -43,11 +43,11 @@ module TB_GeradorImediato;
         $display("PC %d |Opcode: %b |Instrucao[31:0]: %b",pc,Opcode,instruction);
         $display("Imediato: %d\n",Imediato);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 endmodule
 
-// Para compilar e rodar
-//mingw32-make Teste_Intrucoes
+//Compilar e rodar:
+// mingw32-make Teste_ImmGen

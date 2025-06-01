@@ -165,3 +165,7 @@ module TB_registradores;
     end
 
 endmodule
+
+
+//Compilar e rodar:
+// mingw32-make Teste_Caminho_de_Dados

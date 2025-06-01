@@ -55,12 +55,12 @@ module TB_registradores;
         $display("Rs1: %b|Rs2: %b|RD: %b |WriteData %d",Rs1,Rs2,RsD,WriteData);
         $display("Data1: %d |Data2: %d\n",data1,data2);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_Registradores
+//Compilar e rodar:
+// mingw32-make Teste_Registradores

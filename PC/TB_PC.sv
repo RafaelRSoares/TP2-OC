@@ -33,11 +33,11 @@ module TB_pc;
         $display("PC %b |imdeiato: %d |branch: %b |Eh_zero %b",pc,Imediato,Branch,eh_zero);
         $display("PC Proximo: %b",PcProximo);
         pc = PcProximo;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 endmodule
 
-// Para compilar e rodar
-//mingw32-make Teste_Intrucoes
+//Compilar e rodar:
+// mingw32-make Teste_PC

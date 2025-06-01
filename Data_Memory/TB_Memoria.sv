@@ -116,12 +116,12 @@ module TB_registradores;
         $display("PC %d |Endereco %d |WriteData: %b |MemWrite %b |MemRead: %b",pc,resultado,data2,MemWrite,MemRead);
         $display("ReadData: %b\n",ReadData);
         pc = pc + 4;
-        if (pc > 8) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_ALU
+//Compilar e rodar:
+// mingw32-make Teste_Data_Memory

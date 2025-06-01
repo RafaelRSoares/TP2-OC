@@ -80,12 +80,12 @@ module TB_registradores;
         $display("PC %d |ALUOp: %b |funct3: %b |funct7: %b",pc,ALUOp,funct3,funct7);
         $display("controle_alu: %b\n",controle_alu);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_Controle
+//Compilar e rodar:
+// mingw32-make Teste_controladorALU

@@ -5,7 +5,7 @@ module MuxDataMemory (
     output logic [31:0] WriteData
 );
 
-always_comb begin // mudei tava ff
+always_comb begin
     case (MemtoReg)
         1'b0: begin
             WriteData = ResultadoALU;

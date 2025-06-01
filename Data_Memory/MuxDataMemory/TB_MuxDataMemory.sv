@@ -123,12 +123,12 @@ module TB_registradores;
         $display("PC %d |MemtoReg: %b |ReadData: %b | Resultado %b",pc,MemtoReg,ReadData,resultado);
         $display("WriteData: %b\n",WriteData);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_ALU
+//Compilar e rodar:
+// mingw32-make Teste_Mux_Data_Memory

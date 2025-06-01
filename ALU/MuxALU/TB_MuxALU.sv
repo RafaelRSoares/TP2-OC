@@ -82,12 +82,12 @@ module TB_registradores;
         $display("PC %d |ALUSrc: %b |Entrada2 %b |Imediato: %b",pc,ALUSrc,data2,Imediato);
         $display("SaidaMuxALU: %b\n",SaidaMuxALU);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_Controle
+//Compilar e rodar:
+// mingw32-make Teste_Mux

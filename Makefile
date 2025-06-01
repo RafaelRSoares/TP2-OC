@@ -1,4 +1,4 @@
-Teste_Intrucoes:
+Teste_Instrucoes:
 	iverilog -g2012 -I TP2_OC -o executavel.vvp Instructions_Memory/Memoria_de_Instrucoes.sv Instructions_Memory\TB_Memoria_de_Instrucoes.sv && vvp executavel.vvp
 
 Teste_ImmGen:

@@ -71,12 +71,12 @@ module TB_registradores;
         $display("PC %d |Opcode: %b ",pc,Opcode);
         $display("RegWrite: %b|MemRead: %b |MemWrite: %b |ALUSrc: %b |MempraReg: %b |Branch: %b |ALUOp: %b\n",RegWrite,MemRead,MemWrite,ALUSrc,MemtoReg,Branch,ALUOp);
         pc = pc + 4;
-        if (pc > 24) begin
+        if (pc > 52) begin
             $finish;
         end
     end
 
 endmodule
 
-//Para compilar e rodar
-//mingw32-make Teste_Controle
+//Compilar e rodar:
+// mingw32-make Teste_Controle

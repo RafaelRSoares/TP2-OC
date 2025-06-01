@@ -5,7 +5,7 @@ module controle_alu(
     output logic [3:0] controle_alu
 );
 
-//esses valores da ALU que estou usando são com base nisso, pedro
+//esses valores da ALU que estou usando são com base
 // 0000: add
 // 0001: sub
 // 0010: and
