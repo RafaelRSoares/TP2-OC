@@ -1,8 +1,8 @@
 module caminhodedados(
-
-    input logic clk
+    input logic clk,
+    input logic [31:0] Pcdisplay,
+    input logic Regx1
 );
-
 
     
     logic RegWrite;

@@ -11,9 +11,11 @@ module Pc_modulo(
 always_comb begin
     if (Branch && eh_zero) begin
         PcProximo = PcAnterior + Imediato;
+        //PcAnterior  = PcProximo;
     end
     else begin
         PcProximo = PcAnterior + 4;
+        //PcAnterior  = PcProximo;
     end
 end
 
