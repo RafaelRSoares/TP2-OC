@@ -5,7 +5,8 @@ module Moduloregistradores(
     input logic [4:0] RsD,
     input logic [31:0] WriteData,
     output logic [31:0] Data1,
-    output logic [31:0] Data2
+    output logic [31:0] Data2,
+    output logic [31:0] DisplayX1
 );
 
 logic [31:0] registradores [31:0];
@@ -19,6 +20,7 @@ end
     
 assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
 assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
+assign DisplayX1 = registradores[1];
 
 always_ff @(posedge clk)begin
     if (RegWrite == 1 && RsD != 0) begin
