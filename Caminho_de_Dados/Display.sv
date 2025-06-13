@@ -60,38 +60,7 @@ module Display(
         default: displayx1 = 7'b1111111;
     endcase
 
-    // $display("Display PC bit 1: %b |Display PC bit 2: %b",displaypc1,displaypc2);
-    // $display("X1: %b",displayx1);
-    
     end
 
 
 endmodule
-
-
-// `timescale 1ns/1ps
-
-//     module Display(
-//         output logic [6:0] displaypc1,
-//         output logic [6:0] displaypc2,
-//         output logic [6:0] displayDisplay,
-//     ); 
-
-//     reg clk;
-//     input logic [31:0] pc;
-//     input logic Regx;
-
-//     caminhodedados Caminhodedados(
-//         .clk(clk)
-//         .pc(pc)
-//         .Regx1(Regx1)
-//     );
-
-//     always_ff @(posedge clk)begin
-        
-
-
-//     end
-
-
-// endmodule
