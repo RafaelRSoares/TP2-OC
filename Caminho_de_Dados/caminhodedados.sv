@@ -6,7 +6,6 @@ module caminhodedados(
 );
 
     logic RegWrite;
-    logic [31:0] pc;
     logic [31:0] instruction;
     logic [6:0] Opcode;
     logic [4:0] Rs1;
@@ -37,6 +36,8 @@ module caminhodedados(
     logic [31:0] ReadData;
     
     logic [31:0] PcProximo;
+
+//    logic [31:0] Pcdisplay;
 
     Memoria_Intrucoes TBMEMORIA(
         .pc(PcProximo),
@@ -120,7 +121,7 @@ module caminhodedados(
     );
 
     Pc_modulo TBPCModulo(
-        .PcAnterior(pc),
+        .clk(clk),
         .Imediato(Imediato),
         .Branch(Branch),
         .eh_zero(eh_zero),

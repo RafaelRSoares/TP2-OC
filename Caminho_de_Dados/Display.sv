@@ -11,6 +11,11 @@ module Display(
     logic [31:0] pc;
     logic [31:0] Regx;
 
+    // initial begin
+    //     reset = 1'b1;
+    // end
+
+
     caminhodedados Caminhodedados(
         .clk(clk),
         .Pcdisplay(pc),

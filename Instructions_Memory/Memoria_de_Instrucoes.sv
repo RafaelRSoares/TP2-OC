@@ -15,7 +15,7 @@ module Memoria_Intrucoes(
     logic [31:0] mem [0:TamMEM - 1];
 
     assign instruction = mem[pc[31:2]];
-
+    assign Pcdisplay = pc;
     assign Opcode = instruction[6:0];
     assign Rs1 = instruction[19:15];
     assign Rs2 = instruction[24:20];
