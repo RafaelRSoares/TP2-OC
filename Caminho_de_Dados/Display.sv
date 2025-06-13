@@ -2,6 +2,7 @@
 
 module Display(
         input logic clk,
+        input logic reset,
         output logic [6:0] displaypc1,
         output logic [6:0] displaypc2,
         output logic [6:0] displayx1
@@ -13,7 +14,8 @@ module Display(
     caminhodedados Caminhodedados(
         .clk(clk),
         .Pcdisplay(pc),
-        .Regx1(Regx)
+        .Regx1(Regx),
+        .reset(reset)
     );
 
     always_ff @(posedge clk)begin

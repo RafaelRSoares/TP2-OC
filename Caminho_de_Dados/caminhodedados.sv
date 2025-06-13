@@ -1,5 +1,6 @@
 module caminhodedados(
     input logic clk,
+    input logic reset,
     output logic [31:0] Pcdisplay,
     output logic [31:0] Regx1
 );
@@ -59,7 +60,8 @@ module caminhodedados(
         .WriteData(WriteDataReg),
         .Data1(data1),
         .Data2(data2),
-        .DisplayX1(Regx1)
+        .DisplayX1(Regx1),
+        .reset(reset)
      );
 
      Controle TBCONTROLE(
@@ -106,7 +108,8 @@ module caminhodedados(
         .WriteData(data2),
         .MemWrite(MemWrite),
         .MemRead(MemRead),
-        .ReadData(ReadData)
+        .ReadData(ReadData),
+        .reset(reset)
     );
 
     MuxDataMemory MUXDATAMEMORY(
@@ -122,7 +125,8 @@ module caminhodedados(
         .Imediato(Imediato),
         .Branch(Branch),
         .eh_zero(eh_zero),
-        .PcProximo(PcProximo)
+        .PcProximo(PcProximo),
+        .reset(reset)
     );
 endmodule
 

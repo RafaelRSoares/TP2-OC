@@ -4,7 +4,8 @@ module Memoria(
     input  logic [31:0] WriteData,
     input  logic MemWrite,
     input  logic MemRead,
-    output logic [31:0] ReadData
+    output logic [31:0] ReadData,
+    input logic reset
 );
     parameter EspacoMem = 256;
     localparam AddrWidth = $clog2(EspacoMem);
@@ -19,6 +20,13 @@ module Memoria(
     initial begin
         for (i = 0; i < EspacoMem; i = i + 1)
             MemExterna[i] = 8'h0;
+    end
+
+    always_comb begin
+        if (reset) begin
+            for (i = 0; i < EspacoMem; i = i + 1)
+                MemExterna[i] = 8'h0;
+        end
     end
 
     // Leitura combinacional (sem latch)
