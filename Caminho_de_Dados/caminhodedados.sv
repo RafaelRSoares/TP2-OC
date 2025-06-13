@@ -40,7 +40,7 @@ module caminhodedados(
     logic [31:0] PcProximo;
 
     Memoria_Intrucoes TBMEMORIA(
-        .pc(pc),
+        .pc(PcProximo),
         .Pcdisplay(Pcdisplay),
         .instruction(instruction),
         .Opcode(Opcode),

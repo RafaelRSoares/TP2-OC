@@ -15,9 +15,10 @@ always_comb begin
 end
 
 always_comb begin
+    integer aux;
     if (Branch && eh_zero) begin
-        PcProximo = PcAnterior + Imediato;
-        //PcAnterior  = PcProximo;
+        aux = PcAnterior + Imediato;
+        PcProximo = aux;
     end
     else begin
         PcProximo = PcAnterior + 4;
