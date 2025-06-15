@@ -1,5 +1,6 @@
 module Moduloregistradores(
-    input logic clk,RegWrite,
+    input logic clk,
+    input logic RegWrite,
     input logic [4:0] Rs1,
     input logic [4:0] Rs2,
     input logic [4:0] RsD,
@@ -10,32 +11,21 @@ module Moduloregistradores(
     input logic reset
 );
 
-logic [31:0] registradores [31:0];
-
-integer i;
-
-initial begin
-    for (i = 0;i < 32;i = i + 1) begin
-        registradores[i] = i;
-    end
-end
-
-always_comb begin
-    if(reset)begin
-        for (i = 0;i < 32;i = i + 1) begin
-            registradores[i] = i;
+    logic [31:0] registradores [31:0];
+    
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            for (int i = 0; i < 32; i = i + 1) begin
+                registradores[i] <= i; 
+            end
         end
-    end    
-end
-
-assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
-assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
-assign DisplayX1 = registradores[1];
-
-always_ff @(posedge clk)begin
-    if (RegWrite == 1 && RsD != 0) begin
-        registradores[RsD] = WriteData;
+        else if (RegWrite && RsD != 0) begin
+            registradores[RsD] <= WriteData;
+        end
     end
-end
+
+    assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
+    assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
+    assign DisplayX1 = registradores[1];
 
 endmodule

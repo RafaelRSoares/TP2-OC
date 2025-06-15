@@ -1,5 +1,6 @@
 module Moduloregistradores(
-    input logic clk,RegWrite,
+    input logic clk,
+    input logic RegWrite,
     input logic [4:0] Rs1,
     input logic [4:0] Rs2,
     input logic [4:0] RsD,
@@ -10,38 +11,27 @@ module Moduloregistradores(
     input logic reset
 );
 
-logic [31:0] registradores [31:0];
-
-integer i;
-
-initial begin
-    for (i = 0;i < 32;i = i + 1) begin
-        registradores[i] = i;
-    end
-end
-
-always_comb begin
-    if(reset)begin
-        for (i = 0;i < 32;i = i + 1) begin
-            registradores[i] = i;
+    logic [31:0] registradores [31:0];
+    
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            for (int i = 0; i < 32; i = i + 1) begin
+                registradores[i] <= i; 
+            end
         end
-    end    
-end
-
-assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
-assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
-assign DisplayX1 = registradores[1];
-
-always_ff @(posedge clk)begin
-    if (RegWrite == 1 && RsD != 0) begin
-        registradores[RsD] = WriteData;
+        else if (RegWrite && RsD != 0) begin
+            registradores[RsD] <= WriteData;
+        end
     end
-end
+
+    assign Data1 = (Rs1 != 0) ? registradores[Rs1] : 32'b0;
+    assign Data2 = (Rs2 != 0) ? registradores[Rs2] : 32'b0;
+    assign DisplayX1 = registradores[1];
 
 endmodule
 
 module Pc_modulo(
-    input logic [31:0] PcAnterior,
+    input logic clk,
     input logic [31:0] Imediato,
     input logic Branch,
     input logic eh_zero,
@@ -49,36 +39,24 @@ module Pc_modulo(
     input logic reset
 );
 
-// initial begin
-//     PcAnterior = 0;
-// end
-
-always_comb begin
-    if (reset) begin
+always_ff @(posedge clk) begin
+    if(reset) begin
         PcProximo = 32'd0;
-        //PcAnterior = 32'd0;
     end
-end
-
-always_comb begin
-    integer aux;
-    $display("PC%d",PcAnterior);
-    if (Branch && eh_zero) begin
-        aux = PcAnterior + Imediato;
-        PcProximo = aux;
+    else if(Branch && eh_zero) begin
+        PcProximo = PcProximo + Imediato;
     end
     else begin
-        PcProximo = PcAnterior + 4;
-        //PcAnterior  = PcProximo;
+        PcProximo = PcProximo + 4;
     end
 end
 
 endmodule
 
 module Memoria_Intrucoes(
-    input logic [31:0] pc, // Endereço da instrução (PC)
+    input logic [31:0] pc,
     output logic [31:0] Pcdisplay,
-    output logic [31:0] instruction,  // Instrução lida da memória
+    output logic [31:0] instruction,
     output logic [6:0] Opcode,
     output logic [4:0] Rs1,
     output logic [4:0] Rs2,
@@ -101,7 +79,6 @@ module Memoria_Intrucoes(
     assign funct7 = instruction[30];
 
     initial begin
-        //$readmemb("Instructions_Memory/Instrucoes.mem", mem);
         mem[0]  = 32'b00000000000101110101000100110011; // srl x2, x14, x1
         mem[1]  = 32'b00000000001000000000001000100011; // sb x2, 4(x0)
         mem[2]  = 32'b00000000010000000000000010000011; // lb x1, 4(x0)
@@ -164,51 +141,43 @@ endmodule
 
 
 module Memoria(
-    input  logic clk,
-    input  logic [31:0] Endereco,
-    input  logic [31:0] WriteData,
-    input  logic MemWrite,
-    input  logic MemRead,
+    input logic clk,
+    input logic [31:0] Endereco,
+    input logic [31:0] WriteData,
+    input logic MemWrite,
+    input logic MemRead,
     output logic [31:0] ReadData,
     input logic reset
 );
     parameter EspacoMem = 256;
     localparam AddrWidth = $clog2(EspacoMem);
 
-    logic [7:0] MemExterna [0:EspacoMem-1];
-    logic [AddrWidth-1:0] endereco_byte;
-    integer i;
+    reg [7:0] MemExterna [0:EspacoMem-1];
+    
+    reg [31:0] ReadData_reg;
+    
+    wire [AddrWidth-1:0] endereco_byte = Endereco[AddrWidth-1:0];
+    
+    assign ReadData = ReadData_reg;
 
-    assign endereco_byte = Endereco[AddrWidth-1:0];
-
-    // Inicialização (apenas para simulação)
-    initial begin
-        for (i = 0; i < EspacoMem; i = i + 1)
-            MemExterna[i] = 8'h0;
-    end
-
-    always_comb begin
-        if (reset) begin
-            for (i = 0; i < EspacoMem; i = i + 1)
-                MemExterna[i] = 8'h0;
-        end
-    end
-
-    // Leitura combinacional (sem latch)
-    always_comb begin
-        if (MemRead) begin
-            ReadData = {{24{MemExterna[endereco_byte][7]}}, MemExterna[endereco_byte]};
-        end else begin
-            ReadData = 32'b0;
-        end
-    end
-
-    // Escrita síncrona
     always_ff @(posedge clk) begin
-        if (MemWrite) begin
-            MemExterna[endereco_byte] <= WriteData[7:0];
+        if (reset) begin
+            for (int i = 0; i < EspacoMem; i = i + 1) begin
+                MemExterna[i] <= 8'h0;
+            end
+            ReadData_reg <= 32'b0;
+        end
+        else begin
+            if (MemWrite) begin
+                MemExterna[endereco_byte] <= WriteData[7:0];
+            end
+            
+             if (MemRead) begin
+                ReadData_reg <= {{24{MemExterna[endereco_byte][7]}},MemExterna[endereco_byte]};
+            end
         end
     end
+
 endmodule
 
 module MuxDataMemory (
@@ -218,7 +187,7 @@ module MuxDataMemory (
     output logic [31:0] WriteData
 );
 
-always_comb begin // mudei tava ff
+always_comb begin
     case (MemtoReg)
         1'b0: begin
             WriteData = ResultadoALU;
@@ -239,7 +208,6 @@ module Controle (
 );
 
 always_comb begin
-    // valor base das variáveis, é o default, só que antes ao invés de no final, pra poder escrever só as mudanças de valor
     RegWrite   = 0;
     MemRead    = 0;
     MemWrite   = 0;
@@ -266,7 +234,6 @@ always_comb begin
         end
         default: begin
             `ifdef SIMULATION
-            $display("Opcode não reconhecido: %b", opcode);
             `endif
         end
     endcase
@@ -280,16 +247,15 @@ module ALU(
     input logic [31:0] entrada2,
     input logic [3:0] controle_alu,
     output logic [31:0] resultado,
-    output logic eh_zero //pro beq
+    output logic eh_zero
 );
 
-//operações
-logic [4:0] aux; //o compilador deu problema quando tentei usar direto no always_comb
+logic [4:0] aux;
 assign aux = entrada2[4:0];
 always_comb begin
     case (controle_alu)
         4'b0000: begin
-            resultado = entrada1 + entrada2; //ass
+            resultado = entrada1 + entrada2; 
         end
         4'b0001: begin
             resultado = entrada1 - entrada2; //sub
@@ -333,13 +299,13 @@ always_comb begin
     endcase
 end
 
-
 endmodule
+
 
 module controle_alu(
     input logic [1:0] ALUOp, //do Controle
     input logic [2:0] funct3, //os 3 bits da funct3, 14 a 12
-    input logic funct7b5,      //o sexto bit (da esquerda pra direita) da funct7, o único que muda nas nossas instruções
+    input logic funct7b5,      //o sexto bit (da esquerda pra direita) da funct7
     output logic [3:0] controle_alu
 );
 
@@ -361,7 +327,7 @@ always_comb begin
         end
         2'b10: begin //tipo-R, pra diferenciar precisa da funct3 e da 7b5
             case(funct3)
-            3'b000: begin //pra gente, pode ser add ou sub
+            3'b000: begin 
                 if (funct7b5==1)
                     controle_alu = 4'b0001; //sub
                 else
@@ -388,13 +354,12 @@ always_comb begin
         end
 
         default: 
-            controle_alu = 4'b1111; //inválido aqui tbm
+            controle_alu = 4'b1111; //inválido
     endcase
 end
 
 endmodule
         
-
 
 module caminhodedados(
     input logic clk,
@@ -404,7 +369,6 @@ module caminhodedados(
 );
 
     logic RegWrite;
-    logic [31:0] pc;
     logic [31:0] instruction;
     logic [6:0] Opcode;
     logic [4:0] Rs1;
@@ -435,8 +399,6 @@ module caminhodedados(
     logic [31:0] ReadData;
     
     logic [31:0] PcProximo;
-
-//    logic [31:0] Pcdisplay;
 
     Memoria_Intrucoes TBMEMORIA(
         .pc(PcProximo),
@@ -520,7 +482,7 @@ module caminhodedados(
     );
 
     Pc_modulo TBPCModulo(
-        .PcAnterior(pc),
+        .clk(clk),
         .Imediato(Imediato),
         .Branch(Branch),
         .eh_zero(eh_zero),
@@ -529,23 +491,17 @@ module caminhodedados(
     );
 endmodule
 
-`timescale 1ns/1ps
-
 module Display(
         input logic clk,
         input logic reset,
         output logic [6:0] displaypc1,
         output logic [6:0] displaypc2,
-        output logic [6:0] displayx1
+        output logic [6:0] displayx1bit1,
+        output logic [6:0] displayx1bit2
     ); 
 
     logic [31:0] pc;
     logic [31:0] Regx;
-
-    // initial begin
-    //     reset = 1'b1;
-    // end
-
 
     caminhodedados Caminhodedados(
         .clk(clk),
@@ -566,7 +522,7 @@ module Display(
         4'd7: displaypc2 = 7'b1111000;
         4'd8: displaypc2 = 7'b0000000;
         4'd9: displaypc2 = 7'b0010000;
-        default: displaypc2 = 7'b1111111; //display apagado
+        default: displaypc2 = 7'b1111111;
     endcase
         case((pc/4)/10)
         4'd0: displaypc1 = 7'b1000000;
@@ -579,24 +535,37 @@ module Display(
         4'd7: displaypc1 = 7'b1111000;
         4'd8: displaypc1 = 7'b0000000;
         4'd9: displaypc1 = 7'b0010000;
-        default: displaypc1 = 7'b1111111; //display apagado
+        default: displaypc1 = 7'b1111111; 
         endcase
 
     case(Regx/1000)
-        4'd0: displayx1 = 7'b1000000;
-        4'd1: displayx1 = 7'b1111001;
-        4'd2: displayx1 = 7'b0100100;
-        4'd3: displayx1 = 7'b0110000;
-        4'd4: displayx1 = 7'b0011001;
-        4'd5: displayx1 = 7'b0010010;
-        4'd6: displayx1 = 7'b0000010;
-        4'd7: displayx1 = 7'b1111000;
-        4'd8: displayx1 = 7'b0000000;
-        4'd9: displayx1 = 7'b0010000;
-        default: displayx1 = 7'b1111111;
+        4'd0: displayx1bit1 = 7'b1000000;
+        4'd1: displayx1bit1 = 7'b1111001;
+        4'd2: displayx1bit1 = 7'b0100100;
+        4'd3: displayx1bit1 = 7'b0110000;
+        4'd4: displayx1bit1 = 7'b0011001;
+        4'd5: displayx1bit1 = 7'b0010010;
+        4'd6: displayx1bit1 = 7'b0000010;
+        4'd7: displayx1bit1 = 7'b1111000;
+        4'd8: displayx1bit1 = 7'b0000000;
+        4'd9: displayx1bit1 = 7'b0010000;
+        default: displayx1bit1 = 7'b1111111;
+    endcase
+
+    case(Regx%1000)
+        4'd0: displayx1bit2 = 7'b1000000;
+        4'd1: displayx1bit2 = 7'b1111001;
+        4'd2: displayx1bit2 = 7'b0100100;
+        4'd3: displayx1bit2 = 7'b0110000;
+        4'd4: displayx1bit2 = 7'b0011001;
+        4'd5: displayx1bit2 = 7'b0010010;
+        4'd6: displayx1bit2 = 7'b0000010;
+        4'd7: displayx1bit2 = 7'b1111000;
+        4'd8: displayx1bit2 = 7'b0000000;
+        4'd9: displayx1bit2 = 7'b0010000;
+        default: displayx1bit2 = 7'b1111111;
     endcase
 
     end
-
 
 endmodule
