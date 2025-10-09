@@ -538,7 +538,7 @@ module Display(
         default: displaypc1 = 7'b1111111; 
         endcase
 
-    case(Regx/1000)
+    case(Regx/10)
         4'd0: displayx1bit1 = 7'b1000000;
         4'd1: displayx1bit1 = 7'b1111001;
         4'd2: displayx1bit1 = 7'b0100100;
@@ -552,7 +552,7 @@ module Display(
         default: displayx1bit1 = 7'b1111111;
     endcase
 
-    case(Regx%1000)
+    case(Regx%10)
         4'd0: displayx1bit2 = 7'b1000000;
         4'd1: displayx1bit2 = 7'b1111001;
         4'd2: displayx1bit2 = 7'b0100100;
